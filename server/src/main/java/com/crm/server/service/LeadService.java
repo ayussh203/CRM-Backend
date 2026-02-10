@@ -9,7 +9,8 @@ import com.crm.server.repository.TenantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.crm.server.event.LeadCreatedEvent;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,9 +48,12 @@ LeadCreatedEvent event = new LeadCreatedEvent(
      return savedLead;
     }
 
-    public List<Lead> getMyLeads() {
+   public Page<Lead> getLeads(int page, int size) {
         // Only fetch leads belonging to the logged-in user's tenant
         String tenantId = TenantContext.getTenantId();
-        return leadRepository.findAllByTenantId(UUID.fromString(tenantId));
+       return leadRepository.findAllByTenantId(
+        UUID.fromString(tenantId), 
+        PageRequest.of(page, size)
+    );
     }
 }

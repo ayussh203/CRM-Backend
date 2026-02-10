@@ -6,7 +6,7 @@ import com.crm.server.service.LeadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Page;
 import java.util.List;
 
 @RestController
@@ -21,8 +21,11 @@ public class LeadController {
         return ResponseEntity.ok(leadService.createLead(leadDTO));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Lead>> getLeads() {
-        return ResponseEntity.ok(leadService.getMyLeads());
-    }
+   @GetMapping
+public ResponseEntity<Page<Lead>> getLeads(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+) {
+    return ResponseEntity.ok(leadService.getLeads(page, size));
+}
 }
