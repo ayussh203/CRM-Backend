@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import com.crm.server.service.WorkflowEngine;
+import com.crm.server.dto.AiResult;
 //import java.util.UUID;
 
 @Service
@@ -17,6 +18,7 @@ public class EventConsumer {
     private final LeadRepository leadRepository;
     private final AiService aiService;
     private final WorkflowEngine workflowEngine;
+    
 
     @KafkaListener(topics = "crm.leads", groupId = "crm-group")
     public void handleLeadCreated(LeadCreatedEvent event) {
@@ -30,8 +32,9 @@ public class EventConsumer {
                     .orElseThrow(() -> new RuntimeException("Lead not found"));
 
             // 3. Process AI Logic (Simulated)
-            String summary = aiService.generateSummary(lead.getCompany(), lead.getSource());
-            int score = aiService.calculateScore(lead.getSource());
+            AiResult result = aiService.analyzeLead(lead.getCompany(), lead.getSource());
+            String summary = result.summary();
+            int score = result.score();
 
             // 4. Update the Database
             lead.setAiSummary(summary);
