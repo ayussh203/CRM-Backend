@@ -7,8 +7,8 @@ import com.crm.server.repository.LeadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
+import com.crm.server.service.WorkflowEngine;
+//import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +16,7 @@ public class EventConsumer {
 
     private final LeadRepository leadRepository;
     private final AiService aiService;
+    private final WorkflowEngine workflowEngine;
 
     @KafkaListener(topics = "crm.leads", groupId = "crm-group")
     public void handleLeadCreated(LeadCreatedEvent event) {
@@ -36,10 +37,12 @@ public class EventConsumer {
             lead.setAiSummary(summary);
             lead.setAiScore(score);
             lead.setStatus(Lead.LeadStatus.QUALIFIED); // Auto-qualify if score is high
+Lead savedLead = leadRepository.save(lead);
+workflowEngine.evaluate(savedLead, "LEAD_CREATED");
 
-            leadRepository.save(lead);
-
-            System.out.println(" AI Processing Complete. Score: " + score);
+           // leadRepository.save(lead);
+System.out.println("AI & Workflows Complete.");
+           // System.out.println(" AI Processing Complete. Score: " + score);
 
         } catch (Exception e) {
             System.err.println(" AI Processing Failed: " + e.getMessage());
