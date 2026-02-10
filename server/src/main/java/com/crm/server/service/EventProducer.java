@@ -2,7 +2,7 @@ package com.crm.server.service;
 
 import com.crm.server.event.LeadCreatedEvent;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafkaTemplate.core.KafkaTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
