@@ -16,7 +16,7 @@ If you are building:
 - A **marketing automation** or **lead-intelligence** platform  
 - A **multi-tenant SaaS backend** that needs auth, tenants, workflows, and AI  
 
-…this server gives you a strong foundation you can demo to stakeholders or investors immediately.
+this server gives you a strong foundation you can demo to stakeholders or investors immediately.
 
 ---
 
@@ -76,6 +76,9 @@ If you are building:
 ---
 
 ### High-level architecture
+
+<img width="1171" height="626" alt="image" src="https://github.com/user-attachments/assets/e3c81690-77fc-4b9c-802a-339e9ba66caf" />
+
 
 - `ServerApplication` – Spring Boot entry point.
 - **Config**
